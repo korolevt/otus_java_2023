@@ -3,13 +3,13 @@ package org.kt;
 import java.util.*;
 
 public class CustomerReverseOrder {
-    LinkedList<Customer> list = new LinkedList<>();
+    Deque<Customer> deque = new LinkedList<>();
 
     public void add(Customer customer) {
-        list.add(customer);
+        deque.add(customer);
     }
 
     public Customer take() {
-        return list.removeLast();
+        return deque.removeLast();
     }
 }
