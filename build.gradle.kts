@@ -1,8 +1,10 @@
 import org.gradle.plugins.ide.idea.model.IdeaLanguageLevel
+import org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
 
 plugins {
     idea
-    `java-library`
+    id("io.spring.dependency-management")
+    id("org.springframework.boot") apply false
 }
 
 idea {
@@ -22,16 +24,24 @@ allprojects {
     group = "org.kt"
 
     repositories {
-        mavenLocal()
         mavenCentral()
+        mavenLocal()
     }
 
     val guava: String by project
 
-    dependencies {
-        implementation("com.google.guava:guava:$guava")
+    apply(plugin = "io.spring.dependency-management")
+    dependencyManagement {
+        dependencies {
+            imports {
+                mavenBom(BOM_COORDINATES)
+//                mavenBom("org.testcontainers:testcontainers-bom:$testcontainersBom")
+            }
+            dependency("com.google.guava:guava:$guava")
+        }
     }
 }
+
 
 subprojects {
     plugins.apply(JavaPlugin::class.java)
@@ -43,5 +53,14 @@ subprojects {
     tasks.withType<JavaCompile> {
         options.encoding = "UTF-8"
         options.compilerArgs.addAll(listOf("-Xlint:all,-serial,-processing", "-Werror"))
+    }
+
+    tasks.withType<Test> {
+        useJUnitPlatform()
+        testLogging.showExceptions = true
+        reports {
+            junitXml.required.set(true)
+            html.required.set(true)
+        }
     }
 }
