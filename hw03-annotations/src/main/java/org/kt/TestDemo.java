@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TestDemo {
+    public static void main(String[] args) throws ClassNotFoundException {
+        new TestDemo().run("org.kt.SomeClass");
+    }
 
     public void runTest(Class<?> clazz, Method before, Method after, Method test) {
         try {
@@ -62,7 +65,5 @@ public class TestDemo {
         System.out.println("Failed tests: " + countFailed);
     }
 
-    public static void main(String[] args) throws ClassNotFoundException {
-        new TestDemo().run("org.kt.SomeClass");
-    }
+
 }
