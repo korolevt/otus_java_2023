@@ -1,10 +1,10 @@
 package org.kt.proxy;
 
-import org.kt.share.TestLoggingInterface;
+import org.kt.share.TestLogging;
 
 public class ProxyDemo {
     public static void main(String[] args) {
-        TestLoggingInterface testLogging = Ioc.createTestLogging();
+        TestLogging testLogging = Ioc.createTestLogging();
         testLogging.calculation(1);
         testLogging.calculation(2, 3);
         testLogging.calculation(4, 5, "6");

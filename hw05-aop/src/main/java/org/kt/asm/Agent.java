@@ -26,15 +26,12 @@ public class Agent {
                                     Class<?> classBeingRedefined,
                                     ProtectionDomain protectionDomain,
                                     byte[] classfileBuffer) {
-                if (className.equals("org/kt/share/TestLogging")) {
-                    return addProxyMethod(classfileBuffer);
-                }
-                return classfileBuffer;
+                return checkMethods(classfileBuffer);
             }
         });
     }
 
-    private static byte[] addProxyMethod(byte[] originalClass) {
+    private static byte[] checkMethods(byte[] originalClass) {
         var cr = new ClassReader(originalClass);
         var cw = new ClassWriter(cr, ClassWriter.COMPUTE_MAXS);
         ClassVisitor cv = new ClassVisitor(Opcodes.ASM5, cw) {

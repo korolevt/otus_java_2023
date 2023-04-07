@@ -1,13 +1,14 @@
 package org.kt.asm;
 
 import org.kt.share.TestLogging;
+import org.kt.share.TestLoggingImpl;
 
 /*
     java -javaagent:AgentDemo.jar -jar AgentDemo.jar
 */
 public class AgentDemo {
     public static void main(String[] args) {
-        TestLogging testLogging = new TestLogging();
+        TestLogging testLogging = new TestLoggingImpl();
         testLogging.calculation(1);
         testLogging.calculation(2, 3);
         testLogging.calculation(4, 5, "6");
