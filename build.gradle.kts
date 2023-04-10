@@ -29,6 +29,7 @@ allprojects {
     }
 
     val guava: String by project
+    val asm: String by project
 
     apply(plugin = "io.spring.dependency-management")
     dependencyManagement {
@@ -38,6 +39,7 @@ allprojects {
 //                mavenBom("org.testcontainers:testcontainers-bom:$testcontainersBom")
             }
             dependency("com.google.guava:guava:$guava")
+            dependency("org.ow2.asm:asm-commons:$asm")
         }
     }
 }
