@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class Cash implements Copyable<Cash> {
-    TreeMap<BanknoteType, Integer> map =
+    private final TreeMap<BanknoteType, Integer> map =
             new TreeMap<>((o1, o2) -> o2.getValue() - o1.getValue());
 
     public Map.Entry<BanknoteType, Integer> getFirst() {

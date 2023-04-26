@@ -1,21 +1,22 @@
 package org.kt;
 
+import java.util.Optional;
+
 public class ATMService {
-    private Cash cash;
+    private Cash cash = new Cash();
 
     public ATMService() {
-        cash = new Cash();
     }
 
     public void put(BanknoteType type, int count) {
         cash.put(type, count);
     }
 
-    public String getBalance() {
+    public String getBalanceReport() {
         return cash.toString();
     }
 
-    public Cash withdrawCash(int amount) {
+    public Optional<Cash> withdrawCash(int amount) {
         System.out.println("В банкомате находится:");
         System.out.println(cash.toString());
         System.out.println("---------");
@@ -46,12 +47,12 @@ public class ATMService {
             System.out.println("---------");
             System.out.println("В банкомате осталось: ");
             System.out.println(cash);
-            return result;
+            return Optional.of(result);
         }
         System.out.println("Не хватает денег на счете");
         System.out.println("---------");
         System.out.println("В банкомате осталось: ");
         System.out.println(cash);
-        return null;
+        return Optional.empty();
     }
 }

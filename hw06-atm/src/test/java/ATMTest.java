@@ -6,6 +6,8 @@ import org.kt.ATMService;
 import org.kt.BanknoteType;
 import org.kt.Cash;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ATMTest {
@@ -25,7 +27,7 @@ public class ATMTest {
     @Test
     @DisplayName("Проверяем, что удалось снять деньги")
     void withdrawCashTest() {
-        Cash result = service.withdrawCash(7230);
+        Optional<Cash> result = service.withdrawCash(7230);
 
         Cash correctResult = new Cash();
         // 7230 = 5000 + 2000 + 100 + 50*2 + 10*3
@@ -36,7 +38,8 @@ public class ATMTest {
         correctResult.put(BanknoteType.R10, 3);
 
         //then
-        assertThat(result.toString()).isEqualTo(correctResult.toString());
+        assertThat(result).isPresent();
+        assertThat(result.get().toString()).isEqualTo(correctResult.toString());
     }
 
     @Test
@@ -54,13 +57,13 @@ public class ATMTest {
         correctBalance.put(BanknoteType.R10, 1);
 
         //then
-        assertThat(service.getBalance()).isEqualTo(correctBalance.toString());
+        assertThat(service.getBalanceReport()).isEqualTo(correctBalance.toString());
     }
 
     @Test
     @DisplayName("Проверяем не успешное снятие")
     void failedWithdrawCashTest() {
-        Cash result = service.withdrawCash(100000);
-        Assertions.assertNull(result);
+        Optional<Cash> result = service.withdrawCash(100000);
+        Assertions.assertFalse(result.isPresent());
     }
 }
