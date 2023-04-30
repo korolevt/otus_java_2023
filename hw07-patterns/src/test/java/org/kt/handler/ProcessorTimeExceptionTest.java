@@ -15,7 +15,7 @@ public class ProcessorTimeExceptionTest {
     @DisplayName("Тестируем исключение в четную секунду")
     void processorTimeException() {
         //given
-        var time_30s = LocalDateTime.now().withSecond(30);
+        var time_30s = LocalDateTime.now().withSecond(30).withNano(0);
         var processorTime = new ProcessorTime(() -> time_30s);
 
         var message = new Message.Builder(1L).build();
