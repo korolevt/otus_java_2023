@@ -1,8 +1,6 @@
 package org.kt.listener.homework;
 
-
 import org.assertj.core.api.AssertionsForClassTypes;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.kt.model.Message;
 import org.kt.model.ObjectForMessage;
@@ -14,7 +12,6 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 class HistoryListenerTest {
 
     @Test
-    @Disabled //надо удалить
     void listenerTest() {
         //given
         var historyListener = new HistoryListener();
@@ -28,17 +25,17 @@ class HistoryListenerTest {
 
         var message = new Message.Builder(id)
                 .field10("field10")
-//TODO: раскоментировать       .field13(field13)
+                .field13(field13)
                 .build();
 
         //when
         historyListener.onUpdated(message);
-//TODO: раскоментировать        message.getField13().setData(new ArrayList<>()); //меняем исходное сообщение
-//TODO: раскоментировать        field13Data.clear(); //меняем исходный список
+        message.getField13().setData(new ArrayList<>()); //меняем исходное сообщение
+        field13Data.clear(); //меняем исходный список
 
         //then
         var messageFromHistory = historyListener.findMessageById(id);
         AssertionsForClassTypes.assertThat(messageFromHistory).isPresent();
-//TODO: раскоментировать        assertThat(messageFromHistory.get().getField13().getData()).containsExactly(data);
+        assertThat(messageFromHistory.get().getField13().getData()).containsExactly(data);
     }
 }
