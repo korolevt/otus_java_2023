@@ -19,3 +19,4 @@ pluginManagement {
     }
 }
 include("hw06-atm")
+include("hw07-patterns")
