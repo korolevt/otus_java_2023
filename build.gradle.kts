@@ -28,8 +28,10 @@ allprojects {
         mavenLocal()
     }
 
+    val protobufBom: String by project
     val guava: String by project
     val asm: String by project
+    val glassfishJson: String by project
 
     apply(plugin = "io.spring.dependency-management")
     dependencyManagement {
@@ -37,9 +39,11 @@ allprojects {
             imports {
                 mavenBom(BOM_COORDINATES)
 //                mavenBom("org.testcontainers:testcontainers-bom:$testcontainersBom")
+                mavenBom("com.google.protobuf:protobuf-bom:$protobufBom")
             }
             dependency("com.google.guava:guava:$guava")
             dependency("org.ow2.asm:asm-commons:$asm")
+            dependency("org.glassfish:jakarta.json:${glassfishJson}")
         }
     }
 }
