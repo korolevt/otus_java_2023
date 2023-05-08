@@ -12,25 +12,29 @@ import java.util.List;
 public class ResourcesFileLoader implements Loader {
 
     private final String fileName;
-
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper;
 
     public ResourcesFileLoader(String fileName) {
+        mapper = createObjectMapper();
         this.fileName = fileName;
+    }
+
+    private static ObjectMapper createObjectMapper() {
+        final ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new SimpleModule()
+                .addDeserializer(Measurement.class, new MeasurementDeserializer()));
+        return mapper;
     }
 
     @Override
     public List<Measurement> load() {
         var stream = ResourcesFileLoader.class.getClassLoader().getResourceAsStream(fileName);
 
-        mapper.registerModule(new SimpleModule()
-                .addDeserializer(Measurement.class, new MeasurementDeserializer()));
-
         try {
             var measurements = mapper.readValue(stream, Measurement[].class);
             return Arrays.asList(measurements);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new FileProcessException(e);
         }
     }
 }
