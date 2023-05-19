@@ -1,7 +1,12 @@
 package org.kt.crm.model;
 
+import org.kt.crm.annotations.Id;
+
 public class Client {
+
+    @Id
     private Long id;
+
     private String name;
 
     public Client() {

@@ -1,6 +1,7 @@
 package org.kt;
 
 import org.flywaydb.core.Flyway;
+import org.kt.jdbc.mapper.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.kt.core.repository.executor.DbExecutorImpl;
@@ -10,9 +11,6 @@ import org.kt.crm.model.Client;
 import org.kt.crm.model.Manager;
 import org.kt.crm.service.DbServiceClientImpl;
 import org.kt.crm.service.DbServiceManagerImpl;
-import org.kt.jdbc.mapper.DataTemplateJdbc;
-import org.kt.jdbc.mapper.EntityClassMetaData;
-import org.kt.jdbc.mapper.EntitySQLMetaData;
 
 import javax.sql.DataSource;
 
@@ -31,9 +29,9 @@ public class HomeWork {
         var dbExecutor = new DbExecutorImpl();
 
 // Работа с клиентом
-        EntityClassMetaData entityClassMetaDataClient; // = new EntityClassMetaDataImpl();
-        EntitySQLMetaData entitySQLMetaDataClient = null; //= new EntitySQLMetaDataImpl(entityClassMetaDataClient);
-        var dataTemplateClient = new DataTemplateJdbc<Client>(dbExecutor, entitySQLMetaDataClient); //реализация DataTemplate, универсальная
+        var entityClassMetaDataClient = new EntityClassMetaDataImpl<Client>(){};
+        var entitySQLMetaDataClient = new EntitySQLMetaDataImpl(entityClassMetaDataClient);
+        var dataTemplateClient = new DataTemplateJdbc<>(dbExecutor, entitySQLMetaDataClient, entityClassMetaDataClient); //реализация DataTemplate, универсальная
 
 // Код дальше должен остаться
         var dbServiceClient = new DbServiceClientImpl(transactionRunner, dataTemplateClient);
@@ -46,9 +44,9 @@ public class HomeWork {
 
 // Сделайте тоже самое с классом Manager (для него надо сделать свою таблицу)
 
-        EntityClassMetaData entityClassMetaDataManager; // = new EntityClassMetaDataImpl();
-        EntitySQLMetaData entitySQLMetaDataManager = null; //= new EntitySQLMetaDataImpl(entityClassMetaDataManager);
-        var dataTemplateManager = new DataTemplateJdbc<Manager>(dbExecutor, entitySQLMetaDataManager);
+        var entityClassMetaDataManager = new EntityClassMetaDataImpl<Manager>(){};
+        var entitySQLMetaDataManager = new EntitySQLMetaDataImpl(entityClassMetaDataManager);
+        var dataTemplateManager = new DataTemplateJdbc<>(dbExecutor, entitySQLMetaDataManager, entityClassMetaDataManager);
 
         var dbServiceManager = new DbServiceManagerImpl(transactionRunner, dataTemplateManager);
         dbServiceManager.saveManager(new Manager("ManagerFirst"));
