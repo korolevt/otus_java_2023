@@ -60,7 +60,7 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
     public long insert(Connection connection, T object) {
         try {
             return dbExecutor.executeStatement(connection, entitySQLMetaData.getInsertSql(),
-                    getParameters(object));
+                    getParams(object));
         } catch (Exception e) {
             throw new DataTemplateException(e);
         }
@@ -70,7 +70,7 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
     public void update(Connection connection, T object) {
         try {
             dbExecutor.executeStatement(connection, entitySQLMetaData.getUpdateSql(),
-                    List.of(getParameters(object), getId(object)));
+                    List.of(getParams(object), getId(object)));
         } catch (Exception e) {
             throw new DataTemplateException(e);
         }
@@ -83,11 +83,11 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
                 String name = rs.getMetaData().getColumnName(idx + 1);
                 Object value = rs.getObject(idx + 1);
                 var field = entityClassMetaData.getAllFields().stream()
-                        .filter(f -> f.getName().equals(name)).findFirst();
-                if (field.isPresent()) {
-                    field.get().setAccessible(true);
-                    field.get().set(object, value);
-                }
+                        .filter(f -> f.getName().equals(name))
+                        .findFirst()
+                        .orElseThrow(() -> new RuntimeException("Not found field: " + name));
+                field.setAccessible(true);
+                field.set(object, value);
             }
             return object;
         } catch (Exception e) {
@@ -95,7 +95,7 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
         }
     }
 
-    private List<Object> getParameters(T object) {
+    private List<Object> getParams(T object) {
         try {
             List<Object> list = new ArrayList<>();
             for (var field : entityClassMetaData.getFieldsWithoutId()) {
