@@ -11,7 +11,9 @@ import org.kt.core.repository.DataTemplateHibernate;
 import org.kt.core.repository.HibernateUtils;
 import org.kt.core.sessionmanager.TransactionManagerHibernate;
 import org.kt.crm.dbmigrations.MigrationsExecutorFlyway;
+import org.kt.crm.model.Address;
 import org.kt.crm.model.Client;
+import org.kt.crm.model.Phone;
 import org.kt.crm.service.DBServiceClient;
 import org.kt.crm.service.DbServiceClientImpl;
 
@@ -51,7 +53,7 @@ public abstract class AbstractHibernateTest {
         configuration.setProperty("hibernate.connection.username", dbUserName);
         configuration.setProperty("hibernate.connection.password", dbPassword);
 
-        sessionFactory = HibernateUtils.buildSessionFactory(configuration, Client.class);
+        sessionFactory = HibernateUtils.buildSessionFactory(configuration, Client.class, Address.class, Phone.class);
 
         transactionManager = new TransactionManagerHibernate(sessionFactory);
         clientTemplate = new DataTemplateHibernate<>(Client.class);

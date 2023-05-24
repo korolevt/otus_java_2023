@@ -3,7 +3,11 @@ package org.kt.service;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.kt.base.AbstractHibernateTest;
+import org.kt.crm.model.Address;
 import org.kt.crm.model.Client;
+import org.kt.crm.model.Phone;
+
+import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -14,14 +18,9 @@ class DbServiceClientTest extends AbstractHibernateTest {
     @DisplayName(" корректно сохранять, изменять и загружать клиента")
     void shouldCorrectSaveClient() {
         //given
-        var client = new Client("Ivan");
-
-        // Это надо раскомментировать, у выполненного ДЗ, все тесты должны проходить
-        // Кроме удаления комментирования, тестовый класс менять нельзя
-/*
         var client = new Client(null, "Vasya", new Address(null, "AnyStreet"), List.of(new Phone(null, "13-555-22"),
                 new Phone(null, "14-666-333")));
-*/
+
 
         //when
         var savedClient = dbServiceClient.saveClient(client);

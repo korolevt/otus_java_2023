@@ -1,6 +1,8 @@
 package org.kt.demo;
 
 import org.hibernate.cfg.Configuration;
+import org.kt.crm.model.Address;
+import org.kt.crm.model.Phone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.kt.core.repository.DataTemplateHibernate;
@@ -25,7 +27,7 @@ public class DbServiceDemo {
 
         new MigrationsExecutorFlyway(dbUrl, dbUserName, dbPassword).executeMigrations();
 
-        var sessionFactory = HibernateUtils.buildSessionFactory(configuration, Client.class);
+        var sessionFactory = HibernateUtils.buildSessionFactory(configuration, Client.class, Address.class, Phone.class);
 
         var transactionManager = new TransactionManagerHibernate(sessionFactory);
 ///
