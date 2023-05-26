@@ -3,6 +3,7 @@ package org.kt.crm.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -49,9 +50,10 @@ public class Client implements Cloneable {
         this.id = id;
         this.name = name;
         this.address = address;
-        this.phones = phones;
-        if (this.phones != null) {
-            this.phones.forEach(p -> p.setClient(this));
+        if (phones != null) {
+            this.phones = new ArrayList<>();
+            phones.forEach(p -> this.phones.add(
+                    new Phone(p.getId(), p.getNumber(), this)));
         }
     }
 
