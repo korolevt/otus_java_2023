@@ -28,6 +28,7 @@ allprojects {
         mavenLocal()
     }
 
+    val testcontainersBom: String by project
     val protobufBom: String by project
     val guava: String by project
     val asm: String by project
@@ -38,7 +39,7 @@ allprojects {
         dependencies {
             imports {
                 mavenBom(BOM_COORDINATES)
-//                mavenBom("org.testcontainers:testcontainers-bom:$testcontainersBom")
+                mavenBom("org.testcontainers:testcontainers-bom:$testcontainersBom")
                 mavenBom("com.google.protobuf:protobuf-bom:$protobufBom")
             }
             dependency("com.google.guava:guava:$guava")
