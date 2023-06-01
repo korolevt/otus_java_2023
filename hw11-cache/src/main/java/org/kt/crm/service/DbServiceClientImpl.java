@@ -1,6 +1,6 @@
 package org.kt.crm.service;
 
-import org.kt.cache.MyCache;
+import org.kt.cache.HwCache;
 import org.kt.core.repository.DataTemplate;
 import org.kt.core.sessionmanager.TransactionManager;
 import org.kt.crm.model.Client;
@@ -15,11 +15,11 @@ public class DbServiceClientImpl implements DBServiceClient {
 
     private final DataTemplate<Client> clientDataTemplate;
     private final TransactionManager transactionManager;
-    private final MyCache<String, Client> cache;
+    private final HwCache<String, Client> cache;
 
     public DbServiceClientImpl(TransactionManager transactionManager,
                                DataTemplate<Client> clientDataTemplate,
-                               MyCache<String, Client> cache) {
+                               HwCache<String, Client> cache) {
         this.transactionManager = transactionManager;
         this.clientDataTemplate = clientDataTemplate;
         this.cache = cache;
