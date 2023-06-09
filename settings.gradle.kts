@@ -11,6 +11,7 @@ include("hw08-json")
 include("hw09-jdbc")
 include("hw10-hibernate")
 include("hw11-cache")
+include("hw12-web")
 
 pluginManagement {
     val dependencyManagement: String by settings
