@@ -48,7 +48,7 @@ public class ClientsWebServerSimple implements ClientsWebServer {
         server.stop();
     }
 
-    private Server initContext() {
+    private void initContext() {
 
         ResourceHandler resourceHandler = createResourceHandler();
         ServletContextHandler servletContextHandler = createServletContextHandler();
@@ -57,9 +57,7 @@ public class ClientsWebServerSimple implements ClientsWebServer {
         handlers.addHandler(resourceHandler);
         handlers.addHandler(applySecurity(servletContextHandler, "/clients", "/api/client/*"));
 
-
         server.setHandler(handlers);
-        return server;
     }
 
     protected Handler applySecurity(ServletContextHandler servletContextHandler, String ...paths) {
