@@ -2,8 +2,8 @@ package org.kt;
 
 import org.kt.appcontainer.AppComponentsContainerImpl;
 import org.kt.appcontainer.api.AppComponentsContainer;
-import org.kt.config.AppConfig;
 import org.kt.services.GameProcessor;
+
 
 /*
 В классе AppComponentsContainerImpl реализовать обработку, полученной в конструкторе конфигурации,
@@ -21,15 +21,15 @@ PS Приложение представляет собой тренажер т�
 
 public class App {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args)  {
         // Опциональные варианты
         //AppComponentsContainer container = new AppComponentsContainerImpl(AppConfig1.class, AppConfig2.class);
 
         // Тут можно использовать библиотеку Reflections (см. зависимости)
-        //AppComponentsContainer container = new AppComponentsContainerImpl("org.kt.config");
+        AppComponentsContainer container = new AppComponentsContainerImpl("org.kt.config");
 
         // Обязательный вариант
-        AppComponentsContainer container = new AppComponentsContainerImpl(AppConfig.class);
+        //AppComponentsContainer container = new AppComponentsContainerImpl(AppConfig.class);
 
         // Приложение должно работать в каждом из указанных ниже вариантов
         GameProcessor gameProcessor = container.getAppComponent(GameProcessor.class);
