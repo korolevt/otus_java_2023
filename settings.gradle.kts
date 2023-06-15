@@ -12,6 +12,8 @@ include("hw09-jdbc")
 include("hw10-hibernate")
 include("hw11-cache")
 include("hw12-web")
+include("hw13-di")
+
 
 pluginManagement {
     val dependencyManagement: String by settings
@@ -26,4 +28,3 @@ pluginManagement {
         id("com.google.protobuf") version protobufVer
     }
 }
-
