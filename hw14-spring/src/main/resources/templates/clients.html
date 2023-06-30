@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Клиенты</title>
+</head>
+
+<body>
+<h4>Добавить нового клиента</h4>
+<form id = "clientForm" th:action="@{/client/save}" th:method="post" accept-charset="utf-8">
+    <input type="text" name = "name" th:name="name" placeholder="Введите имя клиента" required>
+    <input type="text" name = "street"  th:name="street" placeholder="Введите улицу">
+    <input type="text" name = "number" th:name="number" placeholder="Введите телефон">
+    <button type="submit">Добавить</button>
+</form>
+
+<h4>Клиенты</h4>
+<table style="width: 400px">
+    <thead>
+        <tr>
+            <td style="width: 50px">Id</td>
+            <td style="width: 200px">Имя</td>
+            <td style="width: 250px">Адрес</td>
+            <td style="width: 250px">Телефон</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="client : ${clients}">
+            <td th:text="${client.id}">id</td>
+            <td th:text="${client.name}">name</td>
+            <td th:text="${client.address?.street}">street</td>
+            <td th:text="${#strings.listJoin(client.phones.![number],', ')}">phones</td>
+        </tr>
+    </tbody>
+</table>
+</body>
+</html>
