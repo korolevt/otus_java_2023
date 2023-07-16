@@ -43,6 +43,8 @@ allprojects {
 
     val reflections: String by project
 
+    val grpc: String by project
+
     apply(plugin = "io.spring.dependency-management")
     dependencyManagement {
         dependencies {
@@ -67,6 +69,10 @@ allprojects {
             dependency("org.eclipse.jetty:jetty-util:$jetty")
             dependency("org.freemarker:freemarker:$freemarker")
             dependency("org.reflections:reflections:$reflections")
+
+            dependency("io.grpc:grpc-netty:$grpc")
+            dependency("io.grpc:grpc-protobuf:$grpc")
+            dependency("io.grpc:grpc-stub:$grpc")
         }
     }
 }

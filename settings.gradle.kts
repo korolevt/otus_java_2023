@@ -15,6 +15,7 @@ include("hw12-web")
 include("hw13-di")
 include("hw14-spring")
 include("hw15-queue")
+include("hw16-grpc")
 
 pluginManagement {
     val dependencyManagement: String by settings
