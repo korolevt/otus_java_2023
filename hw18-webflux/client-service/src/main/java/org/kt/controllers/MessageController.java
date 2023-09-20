@@ -12,6 +12,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.support.GenericMessage;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 import org.springframework.web.util.HtmlUtils;
@@ -81,35 +82,23 @@ public class MessageController {
                 .exchangeToMono(response -> response.bodyToMono(Long.class));
     }
 
-/*    private static Flux<Message> processResponse(ClientResponse response) {
+    private static Flux<Message> response(ClientResponse response) {
         if (response.statusCode().equals(HttpStatus.OK)) {
             return response.bodyToFlux(Message.class);
         } else {
             return response.createException().flatMapMany(Mono::error);
         }
     }
-*/
+
     private Flux<Message> getMessagesByRoomId(long roomId) {
         return datastoreClient.get().uri(String.format("/msg/%s", roomId))
                 .accept(MediaType.APPLICATION_NDJSON)
-                .exchangeToFlux(response -> {
-                    if (response.statusCode().equals(HttpStatus.OK)) {
-                        return response.bodyToFlux(Message.class);
-                    } else {
-                        return response.createException().flatMapMany(Mono::error);
-                    }
-                });
+                .exchangeToFlux(MessageController::response);
     }
 
     private Flux<Message> getAllMessages() {
         return datastoreClient.get().uri("/msg")
                 .accept(MediaType.APPLICATION_NDJSON)
-                .exchangeToFlux(response -> {
-                    if (response.statusCode().equals(HttpStatus.OK)) {
-                        return response.bodyToFlux(Message.class);
-                    } else {
-                        return response.createException().flatMapMany(Mono::error);
-                    }
-                });
+                .exchangeToFlux(MessageController::response);
     }
 }
