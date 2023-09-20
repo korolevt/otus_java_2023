@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.support.GenericMessage;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,7 @@ import reactor.core.publisher.Mono;
 public class MessageController {
     private static final Logger logger = LoggerFactory.getLogger(MessageController.class);
 
+    private static final long ID_ROOM_1408 = 1408;
     private static final String TOPIC_TEMPLATE = "/topic/response.";
 
     private final WebClient datastoreClient;
@@ -32,13 +34,18 @@ public class MessageController {
     }
 
     @MessageMapping("/message.{roomId}")
-    public void getMessage(@DestinationVariable String roomId, Message message) {
+    @SendTo({TOPIC_TEMPLATE + "{roomId}", TOPIC_TEMPLATE + ID_ROOM_1408})
+    public Message getMessage(@DestinationVariable String roomId, Message message) {
         logger.info("get message:{}, roomId:{}", message, roomId);
-        saveMessage(roomId, message)
-                .subscribe(msgId -> logger.info("message send id:{}", msgId));
 
-        template.convertAndSend(String.format("%s%s", TOPIC_TEMPLATE, roomId),
-                new Message(HtmlUtils.htmlEscape(message.messageStr())));
+        if (roomId.equals(String.valueOf(ID_ROOM_1408))) {
+            logger.info("cannot send message from this room");
+            return null;
+        } else {
+            saveMessage(roomId, message)
+                    .subscribe(msgId -> logger.info("message send id:{}", msgId));
+            return new Message(HtmlUtils.htmlEscape(message.messageStr()));
+        }
     }
 
 
@@ -52,7 +59,8 @@ public class MessageController {
         }
         var roomId = parseRoomId(simpDestination);
 
-        getMessagesByRoomId(roomId)
+        Flux<Message> messageFlux = roomId == ID_ROOM_1408 ? getAllMessages() : getMessagesByRoomId(roomId);
+        messageFlux
                 .doOnError(ex -> logger.error("getting messages for roomId:{} failed", roomId, ex))
                 .subscribe(message -> template.convertAndSend(simpDestination, message));
     }
@@ -73,8 +81,28 @@ public class MessageController {
                 .exchangeToMono(response -> response.bodyToMono(Long.class));
     }
 
+/*    private static Flux<Message> processResponse(ClientResponse response) {
+        if (response.statusCode().equals(HttpStatus.OK)) {
+            return response.bodyToFlux(Message.class);
+        } else {
+            return response.createException().flatMapMany(Mono::error);
+        }
+    }
+*/
     private Flux<Message> getMessagesByRoomId(long roomId) {
         return datastoreClient.get().uri(String.format("/msg/%s", roomId))
+                .accept(MediaType.APPLICATION_NDJSON)
+                .exchangeToFlux(response -> {
+                    if (response.statusCode().equals(HttpStatus.OK)) {
+                        return response.bodyToFlux(Message.class);
+                    } else {
+                        return response.createException().flatMapMany(Mono::error);
+                    }
+                });
+    }
+
+    private Flux<Message> getAllMessages() {
+        return datastoreClient.get().uri("/msg")
                 .accept(MediaType.APPLICATION_NDJSON)
                 .exchangeToFlux(response -> {
                     if (response.statusCode().equals(HttpStatus.OK)) {
