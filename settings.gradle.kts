@@ -17,6 +17,9 @@ include("hw14-spring")
 include("hw15-queue")
 include("hw16-grpc")
 include("hw17-executors")
+include ("hw18-webflux:client-service")
+include ("hw18-webflux:datastore-service")
+
 
 pluginManagement {
     val dependencyManagement: String by settings
