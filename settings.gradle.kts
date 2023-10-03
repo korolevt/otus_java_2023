@@ -19,7 +19,8 @@ include("hw16-grpc")
 include("hw17-executors")
 include ("hw18-webflux:client-service")
 include ("hw18-webflux:datastore-service")
-
+include("project:server")
+include("project:client")
 
 pluginManagement {
     val dependencyManagement: String by settings
